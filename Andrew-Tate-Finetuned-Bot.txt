@@ -1,0 +1,30 @@
+import openai
+
+# Set your OpenAI API key
+openai.api_key = 'YOUR_API_KEY'
+
+# Load the training data from the file
+with open('andrew-data.json', 'r') as file:
+    training_data = file.read()
+
+# Fine-tune the model
+response = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": training_data}
+    ],
+    max_tokens=10000,
+    n=1,
+    stop=None,
+    temperature=0.0,
+)
+
+# Retrieve the fine-tuned model ID
+model_id = response["model"]["id"]
+
+# Save the fine-tuned model ID for future use
+with open('fine-tuned-model-id.txt', 'w') as file:
+    file.write(model_id)
+
+print("Fine-tuning completed successfully.")
